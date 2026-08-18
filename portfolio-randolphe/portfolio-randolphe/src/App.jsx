@@ -1,99 +1,18 @@
-import { useState, useEffect, useRef } from "react";
-import { ArrowRight, MapPin, Mail, Send } from "lucide-react";
-
-/* ============================================================
-   CONTENU — texte "Parcours" réparti en 5 étapes (PK 00 à PK 04)
-   ============================================================ */
-const STOPS = [
-  {
-    pk: "00",
-    year: "2004",
-    title: "Origines",
-    paragraphs: [
-      "Je suis né un jeudi, le 27 mai 2004, dans un petit village du sud-est du Bénin : Hounviguè, dans le département de l'Ouémé. C'est là que commence toute mon histoire.",
-      "J'ai grandi dans une famille modeste, à la fois agricultrice et commerçante — un quotidien simple, rythmé par la terre et le petit commerce, loin de toute agitation urbaine. C'est ce village, et cette famille, qui posent le premier décor de mon parcours.",
-    ],
-  },
-  {
-    pk: "01",
-    year: "2009 — 2025",
-    title: "Formation",
-    paragraphs: [
-      "2009 – 2016 · École primaire publique d'Affamè. Mon parcours scolaire commence ici, dans le calme du village. Six années de primaire qui se concluent en 2016 par mon tout premier diplôme : le CEP.",
-      "J'entame le collège au village, mais très vite je quitte mes parents pour rejoindre ma grande sœur en ville, à Comè. J'ai alors douze ans — le premier grand tournant de ma vie, celui qui me fait quitter un village trop calme pour découvrir un monde entièrement nouveau.",
-      "Au Collège de l'Espoir de Comè, à partir de la classe de 5ᵉ, je commence à revoir mes habitudes : j'apprends la nouveauté, l'ambiance de la ville et tout ce qui va avec. « La ville m'a prouvé l'esprit. » En 2019, j'y décroche mon BEPC avec mention Très Bien — parmi les dix premiers de mon établissement, et des soixante premiers à l'échelle communale.",
-      "En 2021, je poursuis en Première D au CEG 1 de Comè. En 2022 j'obtiens mon Baccalauréat série D, avec 19/20 en biologie — porté par une forte passion pour la biotechnologie, un rêve mûri au fil de mes journées passées devant des documentaires, même au village.",
-      "Cette passion me vaut d'être sélectionné boursier à la fois à l'ENSET et à l'ENSBBA (biotechnologie médicale). J'ai fini par choisir l'ENSET, par amour de l'électronique — l'un des choix les plus difficiles de ma vie : prioriser une seule voie entre deux grandes passions. Mais il le fallait.",
-      "2022 – 2025 · ENSET Lokossa, filière Électronique, élève-professeur. Trois années de labeur, à l'ancêtre, pour devenir élève-professeur.",
-      "Le 14 juillet 2025, je soutiens publiquement mon mémoire devant un jury composé du Dr GNONLONFOUN Jean-Marc et de Mme AHOUANDJINOU Inès. Note : 18/20, mention Excellente. Thème : « Étude, conception et intégration pédagogique d'une capsule vidéo en électronique » — un sujet jugé hors du commun, qui m'a justement amené à développer mes compétences en montage vidéo, réalisé dans le cadre du projet CAPVID / PFCR1 (ENSET Lokossa, édition 2024). J'obtiens ce jour-là le BAPET, Brevet d'Aptitude au Professorat de l'Enseignement Technique, en électronique.",
-    ],
-  },
-  {
-    pk: "02",
-    year: "2025 — 2026",
-    title: "Situation actuelle",
-    paragraphs: [
-      "L'année académique suivante, j'entre dans une nouvelle phase — loin des bancs de l'ENSET en tant qu'étudiant, mais en tant qu'enseignant d'informatique, à l'EMTP de Lokossa. Cette expérience d'enseignement n'est rien d'autre que l'application concrète de tout ce que j'ai eu à étudier durant mes années académiques à l'ancêtre.",
-      "Aujourd'hui, en 2026, j'ai un autre objectif : poursuivre un Master dans un domaine tech ou numérique — développement logiciel, robotique, intelligence artificielle ou cybersécurité. C'est là où mon cursus scolaire en est, à ce jour.",
-    ],
-  },
-  {
-    pk: "03",
-    year: "2022 — 2024",
-    title: "Expériences",
-    paragraphs: [
-      "Dès ma première année académique à l'ENSET, en 2022, j'ai effectué des stages en milieu scolaire puis en entreprise, qui m'ont permis, tout au long de mon parcours, d'acquérir de l'expérience — aussi bien en tant qu'accompagnant pédagogique qu'en tant que technicien en électronique.",
-      "2022 · Premier stage en entreprise, CHD de Lokossa, service électronique. C'est là que j'ai appris le monde de l'entreprise — et de l'administration. Au programme : maintenance et réparations d'équipements hospitaliers.",
-      "2024 · Deuxième stage en entreprise, Leader Électronique, Comè. Maintenance GSM, installation de systèmes d'exploitation, et tâches de soudure / dessoudure.",
-      "En parallèle, responsable de l'institution culturelle et artistique de l'ENSET — une responsabilité qui m'a permis de développer mes compétences en leadership et en gestion de projet.",
-    ],
-  },
-  {
-    pk: "04",
-    year: "2023 — 2026",
-    title: "Certifications & engagements",
-    paragraphs: [
-      "30 août 2023, Comè — ma première attestation de formation, en technique de rédaction de projet et recherche de financement, organisée à l'intention des OSC, dans le cadre du renforcement organisationnel et institutionnel du projet INTER-AGIAL.",
-      "Mars 2026 — certificat d'engagement en tant que monteur vidéo, dans le cadre du projet WAMUP.",
-    ],
-  },
-];
-
-const SKILLS = [
-  "Électronique", "Programmation C", "Conception de circuits", "Montage vidéo",
-  "Motion design", "Prompt engineering", "Intelligence artificielle", "Marketing & contenu",
-];
-const TOOLS = ["Proteus", "Multisim", "VS Code", "Claude Code", "CapCut Pro", "Premiere Pro", "GitHub"];
-
-const PAGES = [
-  { id: "home", label: "Accueil" },
-  { id: "parcours", label: "Parcours" },
-  { id: "competences", label: "Compétences" },
-  { id: "contact", label: "Contact" },
-];
-
-/* floating decorative quads, generated once */
-function useQuads(count) {
-  return useRef(
-    Array.from({ length: count }, () => ({
-      w: 24 + Math.random() * 42,
-      h: 24 + Math.random() * 42,
-      left: Math.random() * 92,
-      top: 20 + Math.random() * 70,
-      rot: (Math.random() * 16 - 8).toFixed(1),
-      skew: (Math.random() * 10 - 5).toFixed(1),
-      delay: Math.random() * 4,
-      dur: 6 + Math.random() * 5,
-    }))
-  ).current;
-}
+import { useState } from "react";
+import { PAGES } from "./data";
+import Home from "./pages/Home";
+import Parcours from "./pages/Parcours";
+import Projects from "./pages/Projects";
+import Competences from "./pages/Competences";
+import Contact from "./pages/Contact";
 
 export default function App() {
   const [page, setPage] = useState("home");
   const [prevPage, setPrevPage] = useState(null);
-  const quads = useQuads(16);
+  const [focusStop, setFocusStop] = useState(null);
 
-  const change = (id) => {
+  const change = (id, stopId = null) => {
+    if (stopId) setFocusStop(stopId);
     if (id === page) return;
     setPrevPage(page);
     setPage(id);
@@ -173,13 +92,81 @@ export default function App() {
         .rt-navbtn::after{ content:''; position:absolute; left:0; bottom:-4px; width:0; height:1px; background:var(--red); transition:width .3s var(--ease); }
         .rt-navbtn:hover::after{ width:100%; }
 
+        /* ---- reveal au scroll (storytelling) ---- */
+        .rt-reveal{ opacity:0; transform:translateY(22px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
+        .rt-reveal-in{ opacity:1; transform:translateY(0); }
+
+        /* ---- figures / images de récit ---- */
+        .rt-figure{ margin:0; }
+        .rt-figure-frame{ position:relative; width:100%; overflow:hidden; border:1.3px solid var(--red); background:rgba(237,234,227,.03); }
+        .rt-figure-img{ width:100%; height:100%; object-fit:cover; display:block; filter:grayscale(1) contrast(1.05) brightness(.95); opacity:0; transition:opacity .6s var(--ease); }
+        .rt-figure-img.rt-figure-loaded{ opacity:1; }
+        .rt-figure-placeholder{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center; padding:16px; border:1px dashed var(--red-dim); }
+        .rt-figure-placeholder span{ font-size:11px; letter-spacing:.04em; color:var(--dim2); max-width:80%; }
+        .rt-figure-caption{ margin-top:8px; font-size:10px; letter-spacing:.05em; color:var(--dim2); text-transform:uppercase; }
+
+        /* ---- citation en exergue ---- */
+        .rt-exergue{ font-style:italic; font-weight:500; font-size:clamp(19px,2.6vw,26px); line-height:1.4; color:var(--paper); margin:22px 0; padding-left:18px; border-left:1.5px solid var(--red); max-width:520px; }
+
+        /* ---- étapes du parcours : mise en page variantes ---- */
+        .rt-stop-split{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:32px; align-items:start; }
+        .rt-stop-split-media{ display:flex; flex-direction:column; gap:18px; }
+        .rt-stop-aside{ display:flex; flex-wrap:wrap; gap:18px; align-items:flex-start; }
+        .rt-diploma-wrap{ width:180px; }
+        .rt-map-wrap{ display:inline-flex; }
+        @media (max-width:760px){
+          .rt-stop-split{ grid-template-columns:1fr; }
+        }
+
+        /* ---- grille hero (accueil) ---- */
+        .rt-hero-grid{ display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr); gap:6vw; align-items:center; }
+        @media (max-width:820px){
+          .rt-hero-grid{ grid-template-columns:1fr; gap:32px; }
+          .rt-hero-grid > *:last-child{ max-width:320px; }
+        }
+
+        /* ---- grille contact (formulaire + carte) ---- */
+        .rt-contact-grid{ display:grid; grid-template-columns:minmax(0,1fr) auto; gap:6vw; align-items:start; }
+        @media (max-width:640px){
+          .rt-contact-grid{ grid-template-columns:1fr; }
+          .rt-contact-grid > *:last-child{ justify-self:start !important; margin-top:20px; }
+        }
+
+        /* ---- carte du Bénin ---- */
+        @keyframes rt-map-pulse{ 0%{ opacity:.9; transform:scale(.85); } 100%{ opacity:0; transform:scale(1.6); } }
+        .rt-map-pulse{ transform-origin:center; transform-box:fill-box; animation:rt-map-pulse 2s var(--ease) infinite; }
+        .rt-map-marker{ transition:opacity .2s; }
+        .rt-map-marker:hover{ opacity:.75; }
+
+        /* ---- page Projets ---- */
+        .rt-project-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:36px 28px; }
+        .rt-project-card{ }
+        .rt-project-trigger{ display:block; width:100%; background:none; border:none; padding:0; margin:0; cursor:pointer; color:inherit; font:inherit; }
+
+        /* ---- jauges de compétences ---- */
+        .rt-gauge{ opacity:1; }
+        .rt-gauge-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; }
+        .rt-gauge-track{ position:relative; width:100%; height:2px; background:var(--line); }
+        .rt-gauge-fill{ position:absolute; left:0; top:0; height:100%; background:var(--red); transition:width 1.1s var(--ease); }
+
+        /* ---- outils ---- */
+        .rt-tool{ display:inline-flex; align-items:center; gap:8px; font-size:13px; color:var(--dim); border:1px solid var(--line); padding:8px 14px; transition:border-color .25s, color .25s; }
+        .rt-tool:hover{ border-color:var(--red-dim); color:var(--paper); }
+
+        /* ---- réseaux (contact) ---- */
+        .rt-social{ display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border:1px solid var(--line); color:var(--dim); transition:border-color .25s, color .25s, transform .25s; }
+        .rt-social:hover{ border-color:var(--red); color:var(--red); transform:translateY(-2px); }
+        .rt-social[aria-disabled="true"]{ opacity:.4; cursor:default; }
+        .rt-social[aria-disabled="true"]:hover{ transform:none; border-color:var(--line); color:var(--dim); }
+
         @media (prefers-reduced-motion: reduce){
-          .rt-page, .rt-stop, .rt-rise, .rt-pop, .rt-quad, .rt-draw, .rt-growline, .rt-navdot.active{ animation:none !important; opacity:1 !important; transform:none !important; }
+          .rt-page, .rt-stop, .rt-rise, .rt-pop, .rt-quad, .rt-draw, .rt-growline, .rt-navdot.active, .rt-map-pulse{ animation:none !important; opacity:1 !important; transform:none !important; }
+          .rt-reveal{ opacity:1 !important; transform:none !important; }
         }
       `}</style>
 
       <div className="rt-root">
-        {/* ============ TOP BAR — fidèle au croquis : nom + tirets, avatar à droite ============ */}
+        {/* ============ TOP BAR ============ */}
         <header style={{ position: "sticky", top: 0, zIndex: 20, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "3vh 6vw", background: "linear-gradient(var(--bg), rgba(10,10,10,.85) 70%, transparent)" }}>
           <div style={{ display: "flex", alignItems: "center" }}>
             <button onClick={() => change("home")} className="rt-serif" style={{ background: "none", border: "none", cursor: "pointer", color: "var(--paper)", fontWeight: 600, fontSize: 20, letterSpacing: "-.01em" }}>
@@ -194,7 +181,6 @@ export default function App() {
             </nav>
           </div>
 
-          {/* avatar — croquis : cercle (tête) + silhouette bras croisés */}
           <svg className="rt-avatar" viewBox="0 0 56 56" width="40" height="40" aria-hidden="true" style={{ cursor: "pointer" }} onClick={() => change("contact")}>
             <circle cx="28" cy="16" r="10" />
             <path d="M11 50 C11 33, 20 27, 28 27 C36 27, 45 33, 45 50" />
@@ -202,138 +188,15 @@ export default function App() {
           </svg>
         </header>
 
-        {/* ============ PAGE: HOME ============ */}
-        {page === "home" && (
-          <main className="rt-page" style={{ "--dx": `${dir * 24}px`, padding: "6vh 6vw 14vh", maxWidth: 1000, margin: "0 auto", position: "relative" }}>
-            {/* formes flottantes du croquis */}
-            <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
-              {quads.map((q, i) => (
-                <div
-                  key={i}
-                  className="rt-quad"
-                  style={{
-                    width: q.w, height: q.h, left: `${q.left}%`, top: `${q.top}%`,
-                    "--r": `${q.rot}deg`,
-                    transform: `rotate(${q.rot}deg) skewX(${q.skew}deg)`,
-                    animationDelay: `${q.delay}s`, animationDuration: `${q.dur}s`,
-                  }}
-                />
-              ))}
-            </div>
-
-            <div style={{ position: "relative", zIndex: 1 }}>
-              <span className="rt-mono rt-rise" style={{ animationDelay: ".05s", fontSize: 11, letterSpacing: ".2em", color: "var(--red)", textTransform: "uppercase", display: "block", marginBottom: 22 }}>
-                PK 00 — point de départ
-              </span>
-              <h1 className="rt-serif rt-rise" style={{ animationDelay: ".15s", fontWeight: 600, fontSize: "clamp(30px,5.4vw,58px)", lineHeight: 1.15, letterSpacing: "-.01em", marginBottom: 22, maxWidth: 760 }}>
-                Salut, je suis <span style={{ fontStyle: "italic", fontWeight: 500 }}>Randolphe&nbsp;KM</span>.<br />
-                Viens, je te raconte plus<br />sur mon parcours.
-              </h1>
-              <p className="rt-rise" style={{ animationDelay: ".28s", color: "var(--dim)", fontSize: 17, lineHeight: 1.7, maxWidth: 540, marginBottom: 36 }}>
-                De Hounviguè à Lokossa, de l'électronique au montage vidéo : voici l'itinéraire, avec ses détours, ses choix difficiles et ses bornes kilométriques.
-              </p>
-              <div className="rt-rise" style={{ animationDelay: ".4s", display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 60 }}>
-                <button className="rt-btn" onClick={() => change("parcours")}>
-                  <span>Suivre l'itinéraire <ArrowRight size={15} /></span>
-                </button>
-                <button className="rt-btn" style={{ borderColor: "var(--line)" }} onClick={() => change("competences")}>
-                  <span>Voir les compétences</span>
-                </button>
-              </div>
-
-              {/* mini route illustration, tracé animé */}
-              <svg viewBox="0 0 800 140" style={{ width: "100%", height: "auto" }}>
-                <path className="rt-draw" d="M 10 100 C 150 30, 250 130, 400 70 S 650 10, 790 60" fill="none" stroke="var(--line)" strokeWidth="1.5" strokeLinecap="round" />
-                {STOPS.map((s, i) => {
-                  const x = 10 + (i / (STOPS.length - 1)) * 780;
-                  const y = 100 - Math.sin(i * 1.3) * 40 - 10;
-                  return (
-                    <g key={s.pk} className="rt-pop" style={{ animationDelay: `${0.8 + i * 0.15}s` }}>
-                      <circle cx={x} cy={y} r="5" fill="var(--bg)" stroke="var(--red)" strokeWidth="1.5" />
-                      <text x={x} y={y - 14} textAnchor="middle" fontFamily="IBM Plex Mono" fontSize="10" fill="var(--dim2)">PK{s.pk}</text>
-                    </g>
-                  );
-                })}
-              </svg>
-            </div>
-          </main>
-        )}
-
-        {/* ============ PAGE: PARCOURS ============ */}
-        {page === "parcours" && (
-          <main className="rt-page" style={{ "--dx": `${dir * 24}px`, padding: "8vh 6vw 14vh", maxWidth: 780, margin: "0 auto" }}>
-            <span className="rt-mono rt-rise" style={{ fontSize: 11, letterSpacing: ".2em", color: "var(--red)", textTransform: "uppercase" }}>Itinéraire complet</span>
-            <h1 className="rt-serif rt-rise" style={{ animationDelay: ".1s", fontWeight: 600, fontSize: "clamp(28px,4vw,42px)", margin: "16px 0 56px" }}>Parcours</h1>
-
-            <div style={{ position: "relative", paddingLeft: 34 }}>
-              <div className="rt-growline" style={{ position: "absolute", left: 5, top: 6, bottom: 6, width: 1, background: "var(--line)" }} />
-              {STOPS.map((s, i) => (
-                <div key={s.pk} className="rt-stop" style={{ position: "relative", marginBottom: 52, animationDelay: `${0.15 + i * 0.1}s` }}>
-                  <div className="rt-pop" style={{ animationDelay: `${0.4 + i * 0.1}s`, position: "absolute", left: -34, top: 4, width: 11, height: 11, borderRadius: "50%", background: "var(--bg)", border: "1.5px solid var(--red)" }} />
-                  <span className="rt-mono" style={{ fontSize: 11, color: "var(--red)", letterSpacing: ".08em" }}>PK {s.pk} — {s.year}</span>
-                  <h2 className="rt-serif" style={{ fontWeight: 600, fontSize: 24, margin: "8px 0 14px" }}>{s.title}</h2>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 14, maxWidth: 600 }}>
-                    {s.paragraphs.map((para, pi) => (
-                      <p key={pi} style={{ color: "var(--dim)", fontSize: 15, lineHeight: 1.75 }}>{para}</p>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </main>
-        )}
-
-        {/* ============ PAGE: COMPÉTENCES ============ */}
-        {page === "competences" && (
-          <main className="rt-page" style={{ "--dx": `${dir * 24}px`, padding: "8vh 6vw 14vh", maxWidth: 780, margin: "0 auto" }}>
-            <span className="rt-mono rt-rise" style={{ fontSize: 11, letterSpacing: ".2em", color: "var(--red)", textTransform: "uppercase" }}>Ce que j'ai appris en chemin</span>
-            <h1 className="rt-serif rt-rise" style={{ animationDelay: ".1s", fontWeight: 600, fontSize: "clamp(28px,4vw,42px)", margin: "16px 0 48px" }}>Compétences</h1>
-
-            <h3 className="rt-mono" style={{ fontSize: 12, letterSpacing: ".1em", color: "var(--dim)", textTransform: "uppercase", marginBottom: 16 }}>Savoir-faire</h3>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 44 }}>
-              {SKILLS.map((s, i) => <span key={s} className="rt-sign" style={{ animationDelay: `${i * 0.05}s` }}>{s}</span>)}
-            </div>
-
-            <h3 className="rt-mono" style={{ fontSize: 12, letterSpacing: ".1em", color: "var(--dim)", textTransform: "uppercase", marginBottom: 16 }}>Outils</h3>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-              {TOOLS.map((t, i) => <span key={t} className="rt-sign" style={{ animationDelay: `${0.4 + i * 0.05}s` }}>{t}</span>)}
-            </div>
-          </main>
-        )}
-
-        {/* ============ PAGE: CONTACT ============ */}
-        {page === "contact" && (
-          <main className="rt-page" style={{ "--dx": `${dir * 24}px`, padding: "8vh 6vw 14vh", maxWidth: 600, margin: "0 auto" }}>
-            <span className="rt-mono rt-rise" style={{ fontSize: 11, letterSpacing: ".2em", color: "var(--red)", textTransform: "uppercase" }}>Prochaine étape</span>
-            <h1 className="rt-serif rt-rise" style={{ animationDelay: ".1s", fontWeight: 600, fontSize: "clamp(28px,4vw,42px)", margin: "16px 0 20px" }}>Continuons la route ensemble.</h1>
-            <p className="rt-rise" style={{ animationDelay: ".2s", color: "var(--dim)", fontSize: 16, lineHeight: 1.7, marginBottom: 44 }}>
-              Un projet, une idée, une question ? Écris-moi.
-            </p>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 22, marginBottom: 36 }}>
-              <div className="rt-rise" style={{ animationDelay: ".3s" }}><input className="rt-field" placeholder="Ton nom" /></div>
-              <div className="rt-rise" style={{ animationDelay: ".38s" }}><input className="rt-field" placeholder="Ton e-mail" type="email" /></div>
-              <div className="rt-rise" style={{ animationDelay: ".46s" }}><textarea className="rt-field" placeholder="Ton message" rows={4} /></div>
-            </div>
-            <div className="rt-rise" style={{ animationDelay: ".56s" }}>
-              <button className="rt-btn">
-                <span>Envoyer <Send size={14} /></span>
-              </button>
-            </div>
-
-            <div className="rt-rise" style={{ animationDelay: ".68s", marginTop: 60, display: "flex", alignItems: "center", gap: 10, color: "var(--dim2)" }}>
-              <MapPin size={14} />
-              <span className="rt-mono" style={{ fontSize: 12 }}>Lokossa, Bénin</span>
-              <span style={{ margin: "0 6px" }}>·</span>
-              <Mail size={14} />
-              <span className="rt-mono" style={{ fontSize: 12 }}>contact@keystudio.bj</span>
-            </div>
-          </main>
-        )}
+        {page === "home" && <Home dir={dir} onNavigate={change} />}
+        {page === "parcours" && <Parcours dir={dir} focusStop={focusStop} onFocusHandled={() => setFocusStop(null)} />}
+        {page === "projets" && <Projects dir={dir} />}
+        {page === "competences" && <Competences dir={dir} />}
+        {page === "contact" && <Contact dir={dir} />}
 
         {/* ============ BOTTOM ROUTE NAV ============ */}
         <footer style={{ position: "sticky", bottom: 0, zIndex: 20, padding: "18px 6vw", background: "linear-gradient(rgba(10,10,10,0), var(--bg) 40%)" }}>
-          <div style={{ maxWidth: 480, margin: "0 auto", display: "flex", alignItems: "center", gap: 14 }}>
+          <div style={{ maxWidth: 560, margin: "0 auto", display: "flex", alignItems: "center", gap: 14 }}>
             {PAGES.map((p, i) => (
               <div key={p.id} style={{ display: "flex", alignItems: "center", flex: i < PAGES.length - 1 ? 1 : "none" }}>
                 <button onClick={() => change(p.id)} className={`rt-navdot${page === p.id ? " active" : ""}`} aria-label={p.label} style={{ padding: 0 }} />
