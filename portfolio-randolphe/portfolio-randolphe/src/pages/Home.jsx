@@ -73,7 +73,7 @@ export default function Home({ dir, onNavigate }) {
           </div>
 
           <Reveal delay={200}>
-            <Figure src={MEDIA.hero} alt="Espace réservé — photo de Randolphe KM" caption="Randolphe KM — Lokossa" ratio="3 / 4" />
+            <Figure src={MEDIA.hero} alt="Randolphe KM" caption="Randolphe KM — WAM UP, Cotonou · 2026" ratio="3 / 2" />
           </Reveal>
         </div>
 

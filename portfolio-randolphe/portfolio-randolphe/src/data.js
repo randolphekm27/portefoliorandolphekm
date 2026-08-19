@@ -7,17 +7,13 @@
       hero: "/images/hero.jpg"
    ============================================================ */
 export const MEDIA = {
-  hero: null,
+  hero: "/images/hero.jpg",
   origines: null,
-  formation: null,
-  diploma: null,
+  formation: "/images/formation-bac.jpg",
+  diploma: "/images/formation-bapet.jpg",
   situation: null,
   experiences: null,
-  certifications: null,
-  projCapsuleVerte: null,
-  projFicc: null,
-  projFbtae: null,
-  projCapsules: null,
+  certifications: "/images/certifications-wamup.jpg",
 };
 
 /* ============================================================
@@ -52,7 +48,7 @@ export const STOPS = [
     pk: "01",
     year: "2009 — 2025",
     title: "Formation",
-    quote: "La ville m'a prouvé l'esprit.",
+    quote: "La ville m'a ouvert l'esprit.",
     paragraphs: [
       "2009 – 2016 · École primaire publique d'Affamè. Mon parcours scolaire commence ici, dans le calme du village. Six années de primaire qui se concluent en 2016 par mon tout premier diplôme : le CEP.",
       "J'entame le collège au village, mais très vite je quitte mes parents pour rejoindre ma grande sœur en ville, à Comè. J'ai alors douze ans — le premier grand tournant de ma vie, celui qui me fait quitter un village trop calme pour découvrir un monde entièrement nouveau.",
@@ -62,8 +58,8 @@ export const STOPS = [
       "2022 – 2025 · ENSET Lokossa, filière Électronique, élève-professeur. Trois années de labeur, à l'ancêtre, pour devenir élève-professeur.",
       "Le 14 juillet 2025, je soutiens publiquement mon mémoire devant un jury composé du Dr GNONLONFOUN Jean-Marc et de Mme AHOUANDJINOU Inès. Note : 18/20, mention Excellente. Thème : « Étude, conception et intégration pédagogique d'une capsule vidéo en électronique » — un sujet jugé hors du commun, qui m'a justement amené à développer mes compétences en montage vidéo, réalisé dans le cadre du projet CAPVID / PFCR1 (ENSET Lokossa, édition 2024). J'obtiens ce jour-là le BAPET, Brevet d'Aptitude au Professorat de l'Enseignement Technique, en électronique.",
     ],
-    image: { key: "formation", src: MEDIA.formation, alt: "Espace réservé — ENSET Lokossa", caption: "ENSET Lokossa, filière Électronique" },
-    diploma: { src: MEDIA.diploma, alt: "Espace réservé — BAPET", caption: "BAPET, mention Excellente — 14 juillet 2025" },
+    image: { key: "formation", src: MEDIA.formation, alt: "Attestation de succès au Baccalauréat", caption: "Attestation de Baccalauréat série D — 2022" },
+    diploma: { src: MEDIA.diploma, alt: "Procès-verbal de soutenance BAPET", caption: "PV de soutenance BAPET, mention Excellente — 14 juillet 2025" },
     cities: ["come", "lokossa"],
     activeCity: "lokossa",
     variant: "b",
@@ -107,7 +103,7 @@ export const STOPS = [
       "30 août 2023, Comè — ma première attestation de formation, en technique de rédaction de projet et recherche de financement, organisée à l'intention des OSC, dans le cadre du renforcement organisationnel et institutionnel du projet INTER-AGIAL.",
       "Mars 2026 — certificat d'engagement en tant que monteur vidéo, dans le cadre du projet WAMUP.",
     ],
-    image: { key: "certifications", src: MEDIA.certifications, alt: "Espace réservé — attestation de formation", caption: "Comè — session de formation, 2023" },
+    image: { key: "certifications", src: MEDIA.certifications, alt: "Certificat d'engagement WAM UP", caption: "Certificat d'engagement, WAM UP — Cotonou, mars 2026" },
     cities: ["come"],
     activeCity: "come",
     variant: "a",
@@ -159,48 +155,6 @@ export const TOOLS = [
 ];
 
 /* ============================================================
-   PROJETS — réalisations concrètes
-   ============================================================ */
-export const PROJECTS = [
-  {
-    id: "capsule-verte",
-    title: "Capsule Verte",
-    subtitle: "Pour Edem d'Almeida",
-    role: "Montage · Motion design",
-    context: "Vidéo de sensibilisation à l'environnement, du dérushage à l'étalonnage.",
-    detail: "Production d'une capsule vidéo courte : montage, habillage motion design et mixage son, pensée pour une diffusion sur les réseaux sociaux.",
-    image: { src: MEDIA.projCapsuleVerte, alt: "Espace réservé — Capsule Verte" },
-  },
-  {
-    id: "ficc-africa",
-    title: "FICC Africa 2026",
-    subtitle: null,
-    role: "Montage · Motion design",
-    context: "Contenus vidéo et habillage graphique pour l'édition 2026 du festival.",
-    detail: "Réalisation de capsules de communication et d'éléments motion design pour le Festival International du Cinéma et de la Cité (FICC Africa), édition 2026.",
-    image: { src: MEDIA.projFicc, alt: "Espace réservé — FICC Africa 2026" },
-  },
-  {
-    id: "fbtae",
-    title: "Identité visuelle FBTAE",
-    subtitle: null,
-    role: "Direction artistique",
-    context: "Construction d'une identité visuelle cohérente pour la structure FBTAE.",
-    detail: "Définition de la direction artistique : palette, typographies et déclinaisons graphiques, dans une logique de cohérence de marque.",
-    image: { src: MEDIA.projFbtae, alt: "Espace réservé — identité visuelle FBTAE" },
-  },
-  {
-    id: "capsules-enset",
-    title: "Capsules pédagogiques ENSET / UNSTIM",
-    subtitle: null,
-    role: "Montage vidéo",
-    context: "Capsules vidéo pédagogiques en électronique, projet CAPVID / PFCR1.",
-    detail: "Conception et montage de capsules vidéo pédagogiques en électronique, dans le cadre du projet CAPVID / PFCR1 à l'ENSET Lokossa (UNSTIM) — le sujet même de mon mémoire de fin de cycle.",
-    image: { src: MEDIA.projCapsules, alt: "Espace réservé — capsules pédagogiques ENSET" },
-  },
-];
-
-/* ============================================================
    STATISTIQUES RAPIDES — page d'accueil
    ============================================================ */
 export const STATS = [
@@ -222,7 +176,6 @@ export const SOCIALS = [
 export const PAGES = [
   { id: "home", label: "Accueil" },
   { id: "parcours", label: "Parcours" },
-  { id: "projets", label: "Projets" },
   { id: "competences", label: "Compétences" },
   { id: "contact", label: "Contact" },
 ];
