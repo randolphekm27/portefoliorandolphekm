@@ -18,14 +18,17 @@ function StopBody({ stop, visited }) {
       <blockquote className="rt-serif rt-exergue">« {stop.quote} »</blockquote>
     </Reveal>
   );
-  const imageBlock = (
+  const hasImage = Boolean(stop.image?.src);
+  const hasDiploma = Boolean(stop.diploma?.src);
+
+  const imageBlock = hasImage && (
     <Reveal delay={120}>
-      <Figure src={stop.image.src} alt={stop.image.alt} caption={stop.image.caption} ratio={stop.variant === "b" ? "1 / 1" : "16 / 10"} />
+      <Figure src={stop.image.src} alt={stop.image.alt} caption={stop.image.caption} ratio={stop.variant === "b" ? "3 / 4" : "16 / 10"} />
     </Reveal>
   );
-  const diplomaBlock = stop.diploma && (
+  const diplomaBlock = hasDiploma && (
     <Reveal delay={160} className="rt-diploma-wrap">
-      <Figure src={stop.diploma.src} alt={stop.diploma.alt} caption={stop.diploma.caption} ratio="4 / 3" className="rt-diploma" />
+      <Figure src={stop.diploma.src} alt={stop.diploma.alt} caption={stop.diploma.caption} ratio="3 / 4" className="rt-diploma" />
     </Reveal>
   );
   const textBlock = (

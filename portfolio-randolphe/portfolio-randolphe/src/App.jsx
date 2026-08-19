@@ -2,7 +2,6 @@ import { useState } from "react";
 import { PAGES } from "./data";
 import Home from "./pages/Home";
 import Parcours from "./pages/Parcours";
-import Projects from "./pages/Projects";
 import Competences from "./pages/Competences";
 import Contact from "./pages/Contact";
 
@@ -138,11 +137,6 @@ export default function App() {
         .rt-map-marker{ transition:opacity .2s; }
         .rt-map-marker:hover{ opacity:.75; }
 
-        /* ---- page Projets ---- */
-        .rt-project-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:36px 28px; }
-        .rt-project-card{ }
-        .rt-project-trigger{ display:block; width:100%; background:none; border:none; padding:0; margin:0; cursor:pointer; color:inherit; font:inherit; }
-
         /* ---- jauges de compétences ---- */
         .rt-gauge{ opacity:1; }
         .rt-gauge-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; }
@@ -190,7 +184,6 @@ export default function App() {
 
         {page === "home" && <Home dir={dir} onNavigate={change} />}
         {page === "parcours" && <Parcours dir={dir} focusStop={focusStop} onFocusHandled={() => setFocusStop(null)} />}
-        {page === "projets" && <Projects dir={dir} />}
         {page === "competences" && <Competences dir={dir} />}
         {page === "contact" && <Contact dir={dir} />}
 
